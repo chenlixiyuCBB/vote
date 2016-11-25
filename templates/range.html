@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>排行榜</title>
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/base.css"/>
+    <style>
+        hr{
+            border-top:.1vw solid #FFD700;
+        }
+        h1,p{
+            margin: .1rem .2rem;
+            font-size: 0.4rem;
+        }
+        
+        .rank{
+            margin: .1rem 0;
+            display: flex;
+            justify-content: center;
+        }
+        .rank p{
+            text-align: center;
+            width: 60vw;
+            font-size: 1rem;
+            background-color: #EBB752;
+            color: white;
+            border-radius: .4rem;
+        }
+        .container{
+            display: flex;
+            flex-direction: column;
+        }
+        .container .user{
+            margin: .2rem;
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            justify-content: space-between;
+            /*border-top: 1px solid #EBB752;*/
+        }
+        .container .user .user-info{
+            display: flex;
+            flex-grow:2
+        }
+        .container .user .user-info img{
+            width: 15vw;
+            height: 15vw;
+        }
+        .container .user .user-love{
+            float: right;
+            display: flex;
+            color: #EBB752;
+            font-size: .7rem;
+        }
+        .page{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.6rem;
+            color: #FFD700;
+            margin: 0.5rem;
+        }
+        .page a{
+            margin: 0 0.2rem;
+            padding:0.15rem;
+            color: white;
+            background-color: #FFD700;
+            border-radius: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+<div class="rank"><p>排行榜</p></div>
+<hr>
+<div class="container">
+    {% for competitor in competitors %}
+    <div class="user">
+        <div class="user-rank">
+            <p>1</p>
+        </div>
+        <div class="user-info">
+            <img src="{% competitor.photo %}" alt="">
+            <div>
+                <h1>{% competitor.name %}</h1>
+                <p>{% competitor.company %}</p>
+            </div>
+        </div>
+        <div class="user-love">
+            <p>{% competitor.count %}</p>
+            <i class="fa fa-heart fa-fw fabulous"></i>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+</div>
+<div class="page">
+    {% if page != 1  %}
+    <a href="/all/{% page - 1%}">上一页</a>
+    {% endif %}
+    <p>{% page %} / {% page_count %}</p>
+    {% if page != page_count  %}
+    <a href="/all/{% page + 1%}">下一页</a>
+    {% endif %}
+</div>
+<div class="foot">
+    <a href=""><i class="fa fa-home fa-fw"></i>首页</a>
+    <a href=""><i class="fa fa-reorder fa-fw"></i>全部</a>
+    <a href=""><i class="fa fa-flag fa-fw"></i>提名</a>
+    <a href=""><i class="fa fa-trophy fa-fw"></i>排行</a>
+    <a href=""><i class="fa fa-heart fa-fw"></i>关注</a>
+</div>
+</body>
+</html>

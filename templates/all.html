@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>全部选手</title>
+    <link rel="stylesheet" href="../static/css/base.css"/>
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <style>
+        body{
+            background: -webkit-linear-gradient(red, black); /* Safari 5.1 - 6.0 */
+            background: -o-linear-gradient(red, black); /* Opera 11.1 - 12.0 */
+            background: -moz-linear-gradient(red, black); /* Firefox 3.6 - 15 */
+            background: linear-gradient(red, black); /* 标准的语法 */
+        }
+        .fabulous{
+            float: right;
+            color: red;
+            font-size: 8vw;
+        }
+        .imgs-list{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+        .imgs-list .img-list{
+            padding: 2vw    ;
+        }
+        .imgs-list .img-list img{
+            padding: 1vw;
+            width: 42vw;
+            height: 42vw;
+            background-color: #FFD700;
+        }
+        .imgs-list .img-info{
+            width: 38vw;
+            padding: 2vw 2vw 2vw 4vw;
+            margin-top: -0.3rem;
+            background-color: #FFD700;
+            border-radius: 0 0 0.5rem 0.5rem;
+        }
+        .imgs-list .img-info h1{
+            text-align: center;
+            font-size: 8vw;
+        }
+        .imgs-list .img-info p,span{
+            font-size: 4vw;
+        }
+        .page{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.6rem;
+            color: #FFD700;
+            margin: 0.5rem;
+        }
+        .page a{
+            margin: 0 0.2rem;
+            padding:0.15rem;
+            color: white;
+            background-color: #FFD700;
+            border-radius: 0.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="imgs-list">
+        {% for competitor in competitors %}
+        <div class="img-list">
+            <a href="/detail/{% competitor.name %}/{% competitor.position %}">
+                <img src="{% competitor.photo %}" alt="">
+                <div class="img-info">
+                    <h1>{% competitor.name %}</h1>
+                    <p>{% competitor.company %}</p>
+                    <i class="fa fa-heart fa-fw fabulous"></i>
+                    <p>{% competitor.position %}</p>
+                    <p>
+                        <span>赞</span>
+                        <span>{% competitor.count %}</span>
+                    </p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="page">
+        {% if page != 1  %}
+        <a href="/all/{% page - 1%}">上一页</a>
+        {% endif %}
+        <p>{% page %} / {% page_count %}</p>
+        {% if page != page_count  %}
+        <a href="/all/{% page + 1%}">下一页</a>
+        {% endif %}
+    </div>
+    <div class="foot">
+        <a href=""><i class="fa fa-home fa-fw"></i>首页</a>
+        <a href=""><i class="fa fa-reorder fa-fw"></i>全部</a>
+        <a href=""><i class="fa fa-flag fa-fw"></i>提名</a>
+        <a href=""><i class="fa fa-trophy fa-fw"></i>排行</a>
+        <a href=""><i class="fa fa-heart fa-fw"></i>关注</a>
+    </div>
+</body>
+</html>

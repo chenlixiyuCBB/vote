@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>修改信息</title>
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link href="http://cdn.bootcss.com/cropper/2.3.4/cropper.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/base.css"/>
+    <style>
+        label,p,a,input,textarea{
+            font-size: 0.4rem;
+        }
+        label{
+            margin-left: 0.6rem;
+        }
+        input,textarea{
+            padding: 0.1rem;
+            width: 5.3rem;
+            margin: 0.1rem;
+            background-color: #efefef;
+            border:0.01rem solid #cecece;
+        }
+        form{
+            margin-top: .2rem;
+        }
+        .container{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .top-bar{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 1rem;
+            background-color: #cecece;
+        }
+        .form-group{
+            width: 80vw;
+            display: flex;
+            line-height: 0.8rem;
+            border: 0.01rem solid #cecece;
+        }
+        .form-group div{
+            padding: 0.1rem 0.1rem 0.1rem 0.5rem;
+            border-right: 0.01rem solid #cecece;
+        }
+        .form-group .middle{
+            margin-top: 0.6rem;
+        }
+        .temp-img-header{
+            display: flex;
+            justify-content: center;
+            padding: 0.3rem;
+            border: 0.01rem solid #cecece;
+        }
+        .border{
+            border: 0.01rem solid #cecece;
+        }
+        .center{
+            padding: 0.2rem;
+            text-align: center;
+        }
+        .submit-group{
+            justify-content: center;
+        }
+        .subimg{
+            width: 60vw;
+            margin: 0.2rem 0;
+            border-radius: 0.1rem;
+            background-color: #EBB752;
+            color: white;
+        }
+        .crop-head{
+            display: none;
+            top: 0;
+            width: 100%;
+            z-index: 999;
+            position: absolute;
+        }
+        .cropper-container{
+            height: 80vh!important;
+        }
+        .btn{
+            text-align: center;
+        }
+        .btn a{
+            padding: .2rem .5rem;
+            background-color: #EBB752;
+            color: white;
+            border-radius: 0.1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top-bar">
+        <p>修改信息</p>
+    </div>
+    <form action="">
+        <div class="form-group">
+            <div>
+                <p>您的手机</p>
+            </div>
+            <input type="number" id="number" placeholder="填写您的手机号" name="phone" value="{% competitor.phone %}">
+        </div>
+        <div class="form-group">
+            <div>
+                <p>管理密码</p>
+            </div>
+            <input type="password" id="password" placeholder="填写您的管理密码" name="password" value="{% competitor.password %}">
+        </div>
+        <div class="form-group">
+            <div>
+                <p>拟推荐人</p>
+            </div>
+            <input type="text" id="name" placeholder="填写您想推荐的人" name="name" value="{% competitor.name %}">
+        </div>
+        <div class="form-group">
+            <div>
+                <p>所在单位</p>
+            </div>
+            <input type="text" id="company" placeholder="填写拟推荐人的单位" name="company" value="{% competitor.company %}">
+        </div>
+        <div class="form-group">
+            <div>
+                <p>工作职位</p>
+            </div>
+            <input type="text" id="position" placeholder="填写拟推荐人的职位" name="position" value="{% competitor.position %}">
+        </div>
+        <div class="form-group">
+            <div>
+                <p class="middle">推荐理由</p>
+            </div>
+            <textarea type="text" rows="4" id="reason" placeholder="填写推荐理由，拟推荐人的事迹" name="reason">{% competitor.reason %}</textarea>
+        </div>
+        <div class="form-group">
+            <div>
+                <p>封面照片</p>
+            </div>
+            <label for="inputImage">点击上传</label>
+            <input type="file" style="display: none" id="inputImage"/>
+        </div>
+        <div class="temp-img-header">
+            <div id="temp-img">
+                <img src="{% competitor.photo %}" width="50" height="50" alt="">
+            </div>
+        </div>
+        <div class="border center">
+            <p>封面照片选填，可不用上传</p>
+            <p>如无法上传请联系微信（xxxxxx）</p>
+        </div>
+        <div class="form-group submit-group">
+            <input type="button" value="我要推荐"  class="subimg"/>
+        </div>
+    </form>
+</div>
+<div class="foot">
+    <a href=""><i class="fa fa-home fa-fw"></i>首页</a>
+    <a href=""><i class="fa fa-reorder fa-fw"></i>全部</a>
+    <a href=""><i class="fa fa-flag fa-fw"></i>提名</a>
+    <a href=""><i class="fa fa-trophy fa-fw"></i>排行</a>
+    <a href=""><i class="fa fa-heart fa-fw"></i>关注</a>
+</div>
+<div class="crop-head">
+    <div class="crop-head-img">
+    </div>
+    <div class="btn">
+        <a>确定</a>
+    </div>
+</div>
+
+<script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+<script src="../static/js/lrz.all.bundle.js"></script>
+<script src="http://cdn.bootcss.com/cropper/2.3.4/cropper.min.js"></script>
+<script>
+    var url = "/edit";
+    var fileName = '';
+    var options = {
+        aspectRatio: 1/1,
+        modal: false,
+        preview: ".extra-preview",
+    };
+
+    $('#inputImage').on('change',function(){
+        var file = this.files[0], _this = this;
+        var fileName = file.name
+        console.log(fileName);
+
+
+        if(file.type.indexOf('image') == -1){
+            alert('请选择图片');
+            return false;
+        }
+
+        lrz(this.files[0], {
+            width: 1024,
+            quality: 1
+        })
+            .then(function (rst) {
+                // 把处理的好的图片给用户看看呗
+                var img = new Image();
+                img.src = rst.base64;
+
+                img.onload = function(){
+                    $('.crop-head-img').html(img);
+                    $('.crop-head').show()
+                    $imageHead = $('.crop-head').find("img");
+                    $imageHead.cropper(options);
+                };
+
+                return rst;
+            });
+    });
+    $('.crop-head .btn').find("a").on('click',function(){
+        var _this = $(this);
+        $imageHead = $(this).parent().prev().find("img").eq(0);
+        if($imageHead.cropper("getCroppedCanvas")){
+            var base = $imageHead.cropper("getCroppedCanvas").toDataURL();
+            var formData = new FormData();
+            formData.append('image', base);
+            formData.append('fileName',fileName);
+
+//                测试
+//                var img = new Image(50,50);
+//                img.src = base;
+//                $("#temp-img").html(img);
+//                $(".crop-head").hide();
+
+            _this.html('正在上传...');
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data);
+                    if(data.code == 1){
+                        _this.html('上传成功！');
+                        var img = new Image(50,50);
+                        img.src = base;
+                        $("#temp-img").html(img);
+
+                        setTimeout(function(){
+                            $(".crop-head").hide()
+                            _this.html('确定');
+                        },1000)
+                    }else {
+                        alert(data.msg);
+                    }
+                },
+                error: function () {
+                }
+            });
+        }
+    })
+</script>
+</body>
+</html>

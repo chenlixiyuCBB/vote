@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>个人详情</title>
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/base.css"/>
+    <style>
+        hr{
+            border-top:.1vw solid #FFD700;
+        }
+        .top-bar{
+            width: 100vw;
+            position: fixed;
+            display: flex;
+            justify-content: center;
+            background-color: #EBB752;
+            color: white;
+        }
+        .user-info{
+            padding: 17vw 4vw 2vw 4vw;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+        .user-img img{
+            width:90vw;
+            height: 90vw;
+        }
+        .user-info .description{
+            margin: .2rem 0;
+        }
+        .user-info h1{
+            font-size: 0.5rem;
+        }
+        .user-info p{
+            font-size: 0.4rem;
+        }
+        .user-info .love{
+            color: red;
+        }
+        .user-info .add-love{
+            margin: .2rem 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #EBB752;
+            color: white;
+            border-radius: .4rem;
+            width: 80vw;
+            height: 10vw;
+        }
+        .content-board{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin: 0 .5rem;
+        }
+        .content-board form{
+            display: flex;
+            justify-content: center;
+            margin: .3rem 0;
+        }
+        .content-board .subimg{
+            width: 1.5rem;
+            height: 2.05rem;
+            background-color: #EBB752;
+            color: white;
+            border:none;
+        }
+        .content-board textarea{
+            border: 1px solid #EBB752;
+            width: 5rem;
+            height: 2rem;
+        }
+        .contents{
+            display: flex;
+            align-items: center;
+            margin: .5rem 0;
+        }
+        .contents p{
+            font-size: .3rem;
+        }
+        .contents .contents-img,.contents-info{
+            margin: 0 .2rem;
+        }
+        .contents .contents-img img{
+            width: 15vw;
+            height:15vw;
+        }
+        .contents .contents-info{
+            flex-grow: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-bar">
+        <p>{% competitor.name %}</p>
+    </div>
+    <div class="user-info">
+        <div class="user-img">
+            <img src="{% competitor.photo %}" alt="">
+        </div>
+        <div class="description">
+            <h1>{% competitor.company %} {% competitor.positio %}</h1>
+        </div>
+        <div class="description">
+            <p>{% competitor.reason %}</p>
+        </div>
+        <div class="love">
+            <p>赞 {% competitor.count %}</p>
+        </div>
+        <div>
+            <p class="add-love">
+                我要点赞
+            </p>
+        </div>
+    </div>
+    <hr>
+    <div class="content-board">
+        <form action="" method="post" id="">
+            <textarea name="content" id="content"></textarea>
+            <input type="button" value="留言"  class="subimg"/>
+        </form>
+        <hr>
+        {% for message in messages %}
+        <div class="contents">
+            <div class="contents-img">
+                <img src="https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1479904596&di=998a90edc3580373f1bdcef658d5b7f3&src=http://img161.poco.cn/mypoco/myphoto/20100527/14/5263863520100527143832050_640.jpg" alt="">
+            </div>
+            <div class="contents-info">
+                <p>
+                    {% message.content %}
+                </p>
+            </div>
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+    <div class="foot">
+        <a href=""><i class="fa fa-home fa-fw"></i>首页</a>
+        <a href=""><i class="fa fa-reorder fa-fw"></i>全部</a>
+        <a href=""><i class="fa fa-flag fa-fw"></i>提名</a>
+        <a href=""><i class="fa fa-trophy fa-fw"></i>排行</a>
+        <a href=""><i class="fa fa-heart fa-fw"></i>关注</a>
+    </div>
+
+    <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        $('.subimg').on('click',function () {
+            var formData = new FormData();
+            var content = $('#content').value();
+            var name = {% competitor.name %};
+            var position = {% competitor.positio %}
+            var url = '/message'
+
+            formData.append('content', content);
+            formData.append('name',name);
+            formData.append('position',position);
+            formData.append('we_id','1123');
+
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data);
+                    if(data.statu == 0){
+                        alert('留言成功')
+                    }else {
+                        alert(data.info);
+                    }
+                },
+                error: function () {
+                }
+            });
+        })
+    </script>
+</body>
+</html>

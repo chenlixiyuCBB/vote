@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>推荐成功</title>
+    <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/base.css"/>
+    <style>
+        hr{
+            border-top:.1vw solid #FFD700;
+        }
+        .success{
+            margin-top: 20vh;
+            margin-bottom: 10vh;
+            text-align: center;
+        }
+
+        .container p{
+            font-size: .5rem;
+        }
+        .info{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+        .info>div{
+            display: flex;
+            margin: 4vw 0 4vw 20vw;
+        }
+        .info div :first-child{
+            width: 30vw;
+        }
+        .container a{
+            margin-left: 20vw;
+            margin-top: 5vw;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #EBB752;
+            color: white;
+            width: 60vw;
+            height: 10vw;
+            border-radius: .3rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="success">
+        <p>推荐成功</p>
+    </div>
+    <div class="container">
+        <div style="margin-left: 5vw">
+            <p>请妥善保管以下信息</p>
+        </div>
+        <hr>
+        <div class="info">
+            <div>
+                <p>手机号： </p>
+                <p>{% competitor.phone %}</p>
+            </div>
+            <div>
+                <p>密码： </p>
+                <p>{% competitor.password %}</p>
+            </div>
+            <div>
+                <p>拟推荐人： </p>
+                <p>{% competitor.name %}</p>
+            </div>
+        </div>
+        <div>
+            <a href="/detail/{% competitor.name %}/{% competitor.position %}"><p>点击查看详情</p></a>
+        </div>
+    </div>
+    <div class="foot">
+        <a href=""><i class="fa fa-home fa-fw"></i>首页</a>
+        <a href=""><i class="fa fa-reorder fa-fw"></i>全部</a>
+        <a href=""><i class="fa fa-flag fa-fw"></i>提名</a>
+        <a href=""><i class="fa fa-trophy fa-fw"></i>排行</a>
+        <a href=""><i class="fa fa-heart fa-fw"></i>关注</a>
+    </div>
+</body>
+</html>
