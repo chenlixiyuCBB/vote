@@ -1,18 +1,17 @@
 # encoding=utf-8
-from app import app, db
-from app.model import competitor, reference, message, visitor
+from app import app
+from app.model import competitor, reference, message, visitor, vote
 from flask import request, render_template,redirect, url_for
 from cache import get_com_count,get_all,get_visit_count,get_vote_count,\
     get_offline_competitors,get_online_competitors,get_range
 from sqlalchemy.exc import SQLAlchemyError
 import os
-from werkzeug import security
 from json import dumps
 from unity import competitor2dict, allowed_file, secure_filename,message2dict
 import base64
 
 # 处理访问首页的请求
-@app.route('/index/<name>/')
+@app.route('/index/<name>/') #测试通过
 def index(name):
     ip = request.remote_addr
     try:
@@ -43,13 +42,13 @@ def index(name):
 
 
 # 处理全部页面初次请求,参赛者顺序排列随机，分页后返回第一页以及页数
-@app.route('/all/')
+@app.route('/all/')#测试通过
 def all_first():
     return redirect(url_for('all',page=1))
 
 
 # 处理全部页面后续请求，参赛者
-@app.route('/all/<int:page>/')
+@app.route('/all/<int:page>/')#测试通过
 def all(page):
     all_competitor = get_all()
     len_all = len(all_competitor)
@@ -64,7 +63,7 @@ def all(page):
 
 
 # 处理排行榜页面请求，方法同上
-@app.route('/range/')
+@app.route('/range/')#测试通过
 def range_first():
     return redirect(url_for('range',page=1))
 
@@ -73,7 +72,7 @@ def range_first():
 
 
 # 处理排行榜页面后续请求
-@app.route('/range/<int:page>/')
+@app.route('/range/<int:page>/')#测试通过
 def range(page):
     range = get_range()
     len_range = len(range)
@@ -87,12 +86,12 @@ def range(page):
     return  render_template("range.html",competitors=competitors,page_count=page_count,page=page)'''
 
 
-@app.route('/reference/', methods=['POST', 'GET'])
-def refernce():
+@app.route('/reference/',methods=['POST','GET'])#测试通过（缺少判断是否提名过）#TODO
+def deal_reference():
     if request.method == 'GET':
         return "12413423242"
         # return render_template("reference.html")
-    elif request.method == 'POST':
+    if request.method == 'POST':
         phone = request.form['phone']
         password = request.form['password']
         try:
@@ -116,7 +115,7 @@ def refernce():
         position = request.form['position']
         photo = request.form['photo']
         reason = request.form['reason']
-        method = int(request.form['form'])
+        method = int(request.form['method'])
         reference_id = reference_id
 
         try:
@@ -131,11 +130,11 @@ def refernce():
             app.logger.error(argument)
             info = {'statu': 1, 'info': str(argument)}
             return dumps(info)
+        return 'ok'
+        #return redirect(url_for("get_detail",phone=phone))
 
-        return redirect(url_for("detail"))
 
-
-@app.route('/login/', methods=['POST'])
+@app.route('/login/', methods=['POST'])#测试通过
 def login():
     phone = request.form['phone']
     password = request.form['password']
@@ -149,15 +148,20 @@ def login():
 
 @app.route('/upload/', methods=['POST'])
 def upload_file():
-    file = request.files['file']
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return dumps({'statu':0,'photo':app.config['UPLOAD_FOLDER']+filename})
+    file = request.form['image']
+    filename = request.form['filename']
+    if file and allowed_file(filename):
+        filename = secure_filename(filename)
+        try:
+          with open(os.path.join(app.config['UPLOAD_FOLDER'], filename),'wb') as image:
+            image.write(base64.b64decode(file))
+          return dumps({'statu':0,'photo':app.config['UPLOAD_FOLDER']+filename})
+        except:
+            return dumps({'statu': 1})
     return dumps({'statu':1})
 
-@app.route('/vote/',methods=['POST'])
-def vote():
+@app.route('/vote/',methods=['POST'])#测试通过（缺少投票限制）#TODO
+def deal_vote():
     name = request.form['name']
     position = request.form['position']
     we_id = request.form['we_id']
@@ -185,7 +189,7 @@ def vote():
         return dumps({'statu': 1, 'info': str(argument)})
     return dumps({'statu':0})
 
-@app.route('/detail/<name>/<position>/',methods=['GET'])
+@app.route('/detail/<name>/<position>/',methods=['GET'])#测试通过
 def get_detail(name,position):
     cur_competitor = competitor.query.filter_by(name=name,position=position).all()[0]
     cur_messages = cur_competitor.message
@@ -195,13 +199,13 @@ def get_detail(name,position):
         messages.append(message)
 
     cur_competitor = competitor2dict(cur_competitor)
+    return dumps(dict(messages=messages,competitor=cur_competitor))
+    #return render_template('detail.html',competitor=cur_competitor,messages=messages)
 
-    return render_template('detail.html',competitor=cur_competitor,messages=messages)
-
-@app.route('/detail/<phone>/',methods=['GET'])
+@app.route('/detail/<phone>/',methods=['GET']) #测试通过
 def get_detail_1(phone):
     cur_reference = reference.query.filter_by(phone=phone).all()[0]
-    cur_competitor = cur_reference.competitor
+    cur_competitor = cur_reference.competitor[0]
     cur_messages = cur_competitor.message
     messages = []
     for message in cur_messages:
@@ -209,17 +213,17 @@ def get_detail_1(phone):
         messages.append(message)
 
     cur_competitor = competitor2dict(cur_competitor)
+    return dumps(dict(messages=messages, competitor=cur_competitor))
+    #return render_template('detail.html', competitor=cur_competitor, messages=messages)
 
-    return render_template('detail.html', competitor=cur_competitor, messages=messages)
-
-@app.route('/message/',methods=['POST'])
-def message():
+@app.route('/message/',methods=['POST'])#测试通过
+def deal_message():
     name = request.form['name']
     positon = request.form['position']
     content = request.form['content']
     we_id = request.form['we_id']
 
-    cur_competitor = competitor.query.filter_by(name=name,positon=positon).all()[0]
+    cur_competitor = competitor.query.filter_by(name=name,position=positon).all()[0]
     competitor_id = cur_competitor.id
 
     try:
@@ -232,4 +236,4 @@ def message():
     except SQLAlchemyError,argument:
         app.logger.error(argument)
         return dumps({'statu':1,'info':str(argument)})
-    return dumps({'statu':0,'message':message2dict(message)})
+    return dumps({'statu':0,'message':message2dict(cur_message)})

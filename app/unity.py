@@ -47,5 +47,5 @@ def message2dict(message):
     message_dict = {}
     message_dict['content'] = message.content
     message_dict['we_id'] = message.we_id
-    message_dict['time'] = message.time
+    message_dict['time'] = str(message.time)
     return message_dict

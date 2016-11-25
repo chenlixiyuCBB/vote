@@ -39,7 +39,7 @@ class competitor(db.Model):
         self.reason = reason
         self.method = method
         self.count = 0
-        self.reference=reference
+        self.reference_id = reference_id
 
     def __repr__(self):
         return "<competitor name %s company %s position %s photo %s reason %s method %s count %s reference%s>" %(self.name,self.company,self.position,
@@ -140,7 +140,7 @@ class vote(db.Model):
             raise ValueError("time is needed!")
 
         self.we_id = we_id
-        self.time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        self.time = time.strftime("%Y-%m-%d", time.localtime())
         self.competitor_id = competitor_id
 
     def __repr__(self):
