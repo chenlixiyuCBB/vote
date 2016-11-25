@@ -92,7 +92,7 @@ def refernce():
     if request.method == 'GET':
         return "12413423242"
         # return render_template("reference.html")
-    else:
+    elif request.method == 'POST':
         phone = request.form['phone']
         password = request.form['password']
         try:
@@ -116,7 +116,7 @@ def refernce():
         position = request.form['position']
         photo = request.form['photo']
         reason = request.form['reason']
-        method = request.form['form']
+        method = int(request.form['form'])
         reference_id = reference_id
 
         try:
