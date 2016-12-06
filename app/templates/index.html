@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>首页</title>
-    <link rel="stylesheet" href="../static/css/base.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"/>
     <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
     <style>
         .fabulous{
@@ -23,6 +23,7 @@
             background: linear-gradient(red, black); /* 标准的语法 */
         }
         .nomination{
+            display: block;
             width: 60vw;
             height:1rem;
             font-size: 0.7rem;
@@ -92,23 +93,23 @@
 </head>
 <body>
     <div class="img">
-        <img src="../static/img/banner111.png" alt="" width="100%">
+        <img src="{{ url_for('static', filename='img/banner111.png') }}" alt="" width="100%">
     </div>
     <div>
-        <p class="nomination"><a  herf="">我要提名</a></p>
+        <a href="{{ url_for('deal_reference') }}" class="nomination">我要提名</a>
     </div>
     <div class="count">
         <div class="count-inner">
             <p>上榜总数</p>
-            <p>{% com_count %}</p>
+            <p>{{ com_count }}</p>
         </div>
         <div class="count-inner">
             <p>点赞总数</p>
-            <p>{% vote_count %}</p>
+            <p>{{ vote_count }}</p>
         </div>
         <div class="count-inner">
             <p>访问总数</p>
-            <p>{% visit_count %}</p>
+            <p>{{ visit_count }}</p>
         </div>
     </div>
     <div>
@@ -117,20 +118,21 @@
         <div class="imgs-list">
             {% for competitor in online_competitors %}
             <div class="img-list">
-                <a href="">
-                    <img src="/detail/{% competitor.name %}/{% competitor.position %}" alt="">
+                <a href="{{ url_for('get_detail',name=competitor.name,position=competitor.position) }}">
+                    <img src="{{ competitor.photo }}" alt="">
                     <div class="img-info">
-                        <h1>{% competitor.name %}</h1>
-                        <p>{% competitor.company %}</p>
+                        <h1>{{ competitor.name }}</h1>
+                        <p>{{ competitor.company }}</p>
                         <i class="fa fa-heart fa-fw fabulous"></i>
-                        <p>{% competitor.position %}</p>
+                        <p>{{ competitor.position }}</p>
                         <p>
                             <span>赞</span>
-                            <span>{% competitor.count %}</span>
+                            <span>{{ competitor.count }}</span>
                         </p>
                     </div>
                 </a>
             </div>
+            {% endfor %}
         </div>
     </div>
     <div>
@@ -139,16 +141,16 @@
         <div class="imgs-list">
             {% for competitor in offline_competitors %}
             <div class="img-list">
-                <a href="/detail/{% competitor.name %}/{% competitor.position %}">
-                    <img src="{% competitor.photo %}" alt="">
+                <a href="{{ url_for('get_detail',name=competitor.name,position=competitor.position) }}') }}">
+                    <img src="{{ competitor.photo }}" alt="">
                     <div class="img-info">
-                        <h1>{% competitor.name %}</h1>
-                        <p>{% competitor.company %}</p>
+                        <h1>{{ competitor.name }}</h1>
+                        <p>{{ competitor.company }}</p>
                         <i class="fa fa-heart fa-fw fabulous"></i>
-                        <p>{% competitor.position %}</p>
+                        <p>{{ competitor.position }}</p>
                         <p>
                             <span>赞</span>
-                            <span>{% competitor.count %}</span>
+                            <span>{{ competitor.count }}</span>
                         </p>
                     </div>
                 </a>
@@ -156,12 +158,6 @@
             {% endfor %}
         </div>
     </div>
-    <div class="foot">
-        <a href=""><i class="fa fa-home fa-fw"></i>首页</a>
-        <a href=""><i class="fa fa-reorder fa-fw"></i>全部</a>
-        <a href=""><i class="fa fa-flag fa-fw"></i>提名</a>
-        <a href=""><i class="fa fa-trophy fa-fw"></i>排行</a>
-        <a href=""><i class="fa fa-heart fa-fw"></i>关注</a>
-    </div>
+    {% include 'foot.html' %}
 </body>
 </html>

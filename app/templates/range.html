@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>排行榜</title>
     <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/base.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"/>
     <style>
         hr{
             border-top:.1vw solid #FFD700;
@@ -14,7 +14,7 @@
             margin: .1rem .2rem;
             font-size: 0.4rem;
         }
-        
+
         .rank{
             margin: .1rem 0;
             display: flex;
@@ -76,40 +76,36 @@
 <hr>
 <div class="container">
     {% for competitor in competitors %}
-    <div class="user">
-        <div class="user-rank">
-            <p>1</p>
-        </div>
-        <div class="user-info">
-            <img src="{% competitor.photo %}" alt="">
-            <div>
-                <h1>{% competitor.name %}</h1>
-                <p>{% competitor.company %}</p>
+    <a href="{{ url_for('get_detail',name=competitor.name,position=competitor.position) }}">
+        <div class="user">
+            <div class="user-rank">
+                <p>{{ competitor.id }}</p>
+            </div>
+            <div class="user-info">
+                <img src="{{ competitor.photo }}" alt="">
+                <div>
+                    <h1>{{ competitor.name }}</h1>
+                    <p>{{ competitor.company }}</p>
+                </div>
+            </div>
+            <div class="user-love">
+                <p>{{ competitor.count }}</p>
+                <i class="fa fa-heart fa-fw fabulous"></i>
             </div>
         </div>
-        <div class="user-love">
-            <p>{% competitor.count %}</p>
-            <i class="fa fa-heart fa-fw fabulous"></i>
-        </div>
-    </div>
+    </a>
     <hr>
     {% endfor %}
 </div>
 <div class="page">
     {% if page != 1  %}
-    <a href="/all/{% page - 1%}">上一页</a>
+    <a href="/all/{{ page - 1}}">上一页</a>
     {% endif %}
-    <p>{% page %} / {% page_count %}</p>
+    <p>{{ page }} / {{ page_count }}</p>
     {% if page != page_count  %}
-    <a href="/all/{% page + 1%}">下一页</a>
+    <a href="/all/{{ page + 1}}">下一页</a>
     {% endif %}
 </div>
-<div class="foot">
-    <a href=""><i class="fa fa-home fa-fw"></i>首页</a>
-    <a href=""><i class="fa fa-reorder fa-fw"></i>全部</a>
-    <a href=""><i class="fa fa-flag fa-fw"></i>提名</a>
-    <a href=""><i class="fa fa-trophy fa-fw"></i>排行</a>
-    <a href=""><i class="fa fa-heart fa-fw"></i>关注</a>
-</div>
+{% include 'foot.html' %}
 </body>
 </html>

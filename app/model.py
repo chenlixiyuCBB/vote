@@ -12,11 +12,12 @@ class competitor(db.Model):
     reason = db.Column(db.String(400))
     method = db.Column(db.Integer) # 1为线上提名 2为线下提名
     count = db.Column(db.Integer)
+    status = db.Column(db.Integer)# 1为审核通过 0为未审核通过
     reference_id = db.Column(db.Integer, db.ForeignKey("reference.id"))
 
     reference = db.relationship('reference', backref=db.backref('competitor'))
 
-    def __init__(self,name,company,position,photo,reason,method,reference_id):
+    def __init__(self,name,company,position,photo,reason,method,reference_id,id=None,status=0):
         if name is None:
             raise ValueError("name is needed!")
         if company is None:
@@ -40,6 +41,8 @@ class competitor(db.Model):
         self.method = method
         self.count = 0
         self.reference_id = reference_id
+        self.id = id
+        self.status=status
 
     def __repr__(self):
         return "<competitor name %s company %s position %s photo %s reason %s method %s count %s reference%s>" %(self.name,self.company,self.position,
@@ -56,7 +59,7 @@ class reference(db.Model):
     phone = db.Column(db.String(13))
     password = db.Column(db.String(20))
 
-    def __init__(self,phone,password):
+    def __init__(self,phone,password,id=None):
         if phone is None:
             raise ValueError("phone is needed!")
         if password is None:
@@ -64,6 +67,7 @@ class reference(db.Model):
 
         self.phone = phone
         self.password = password
+        self.id = id
 
     def __repr__(self):
         return "reference: phone %s password %s" %(self.phone,self.password)
@@ -149,3 +153,19 @@ class vote(db.Model):
     def save(self):
         db.session.add(self)
         db.session.commit()
+
+class admin(db.Model):
+     id = db.Column(db.Integer,primary_key=True)
+     name = db.Column(db.String(15))
+     password = db.Column(db.String(15))
+
+
+     def __init__(self,name,password):
+         if name is None:
+             raise ValueError("name is needed!")
+         if password is None:
+             raise ValueError("password is needed!")
+
+         self.name = name
+         self.password = password
+

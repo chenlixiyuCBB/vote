@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>个人详情</title>
     <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/base.css"/>
+    <link rel="stylesheet" href="../../static/css/base.css"/>
     <style>
         hr{
             border-top:.1vw solid #FFD700;
@@ -154,7 +154,7 @@
             var content = $('#content').value();
             var name = {% competitor.name %};
             var position = {% competitor.positio %}
-            var url = '/message'
+            var url = '/message/'
 
             formData.append('content', content);
             formData.append('name',name);

@@ -28,7 +28,7 @@ def get_visit_count():
 def get_online_competitors():
         online_competitors = []
         count = 1
-        for i in model.competitor.query.filter_by(method=1).order_by("count").limit(6).all():
+        for i in model.competitor.query.filter_by(method=1,status=1).order_by("count").limit(6).all():
             i = competitor2dict(i)
             i['id'] = count
             count += 1
@@ -41,7 +41,7 @@ def get_online_competitors():
 def get_offline_competitors():
         offline_competitors = []
         count = 1
-        for i in  model.competitor.query.filter_by(method=1).order_by("count").limit(6).all():
+        for i in  model.competitor.query.filter_by(method=2,status=1).order_by("count").limit(6).all():
             i = competitor2dict(i)
             i['id'] = count
             count += 1
@@ -53,7 +53,7 @@ def get_offline_competitors():
 def get_range():
         range = []
         count = 1
-        for i in model.competitor.query.order_by("count").all():
+        for i in model.competitor.query.filter_by(status=1).order_by("count").all():
             i = competitor2dict(i)
             i['id'] = count
             count += 1
@@ -64,7 +64,7 @@ def get_range():
 def get_all():
         all_competitor = []
         count = 1
-        for i in model.competitor.query.all():
+        for i in model.competitor.query.filter_by(status=1).all():
             i = competitor2dict(i)
             i['id'] = count
             count += 1

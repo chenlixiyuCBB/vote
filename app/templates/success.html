@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
     <title>推荐成功</title>
     <link href="http://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
-    <link rel="stylesheet" href="../static/css/base.css"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}"/>
     <style>
         hr{
             border-top:.1vw solid #FFD700;
@@ -58,27 +58,21 @@
         <div class="info">
             <div>
                 <p>手机号： </p>
-                <p>{% competitor.phone %}</p>
+                <p>{{ competitor.phone }}</p>
             </div>
             <div>
                 <p>密码： </p>
-                <p>{% competitor.password %}</p>
+                <p>{{ competitor.password }}</p>
             </div>
             <div>
                 <p>拟推荐人： </p>
-                <p>{% competitor.name %}</p>
+                <p>{{ competitor.name }}</p>
             </div>
         </div>
         <div>
-            <a href="/detail/{% competitor.name %}/{% competitor.position %}"><p>点击查看详情</p></a>
+            <a href="/detail/{{ competitor.name }}/{{ competitor.position }}"><p>点击查看详情</p></a>
         </div>
     </div>
-    <div class="foot">
-        <a href=""><i class="fa fa-home fa-fw"></i>首页</a>
-        <a href=""><i class="fa fa-reorder fa-fw"></i>全部</a>
-        <a href=""><i class="fa fa-flag fa-fw"></i>提名</a>
-        <a href=""><i class="fa fa-trophy fa-fw"></i>排行</a>
-        <a href=""><i class="fa fa-heart fa-fw"></i>关注</a>
-    </div>
+    {% include 'foot.html' %}
 </body>
 </html>

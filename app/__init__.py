@@ -10,7 +10,7 @@ app.config.from_pyfile("config.py", silent=True)
 db = SQLAlchemy(app)
 
 # 初始化日志输出
-hanlder = logging.FileHandler("../vote.log",encoding="utf-8")
+hanlder = logging.FileHandler("/../vote.log",encoding="utf-8")
 logging_format = Formatter(
     '%(asctime)s - %(levelname)s - %(filename)s'' - %(funcName)s - %(lineno)s - %(message)s') # 日志格式
 hanlder.setFormatter(logging_format)
